@@ -10,8 +10,9 @@
 - **Библиотеки**:
   - `nlohmann/json` - для работы с JSON файлами
   - `Google Test` - для модульного тестирования
-- **Система сборки**: CMake
-- **IDE**: CLion (рекомендуется)
+- **Система сборки**: CMake 3.15+
+- **Платформы**: Linux, Windows, macOS (кроссплатформенный)
+- **IDE**: CLion, Visual Studio, Qt Creator, или любой редактор с поддержкой CMake
 
 ## Структура проекта
 
@@ -236,33 +237,217 @@ search_engine_1/
 
 ## Запуск проекта
 
+### Требования
+
+- **CMake** версии 3.15 или выше (рекомендуется 3.20+)
+- **Компилятор C++** с поддержкой C++20:
+  - Linux: GCC 10+ или Clang 12+
+  - Windows: MSVC 2019+ или MinGW-w64
+  - macOS: Clang 12+ (Xcode 13+)
+- **Git** (для загрузки зависимостей через CMake FetchContent)
+
 ### Сборка проекта
 
+#### Linux / macOS
+
 ```bash
-cd cmake-build-debug
+# Создаем директорию для сборки
+mkdir -p build
+cd build
+
+# Генерируем файлы сборки
+cmake ..
+
+# Собираем проект
+cmake --build .
+
+# Или используя make напрямую (если используется генератор Makefiles)
+make
+```
+
+#### Windows
+
+```bash
+# В PowerShell или Command Prompt
+mkdir build
+cd build
 cmake ..
 cmake --build .
 ```
 
+Или через Visual Studio:
+```bash
+cmake .. -G "Visual Studio 17 2022"
+# Затем откройте solution файл в Visual Studio
+```
+
 ### Запуск приложения
 
+**Важно**: Убедитесь, что файлы `config.json` и `requests.json` находятся в той же директории, что и исполняемый файл, или в корне проекта.
+
+#### Linux / macOS
+
 ```bash
+# Если собирали в директории build/
+cd build
+./search_engine_1
+
+# Или если исполняемый файл в корне проекта
 ./search_engine_1
 ```
 
-Или в Windows:
+#### Windows
+
 ```bash
+# В PowerShell
 .\search_engine_1.exe
+
+# В Command Prompt
+search_engine_1.exe
 ```
 
 ### Запуск тестов
 
+#### Linux / macOS
+
 ```bash
-cd cmake-build-debug
+cd build
+ctest
+
+# Или с подробным выводом
+ctest --verbose
+
+# Или запуск конкретного теста
+./search_engine_1 --gtest_filter=TestCaseInvertedIndex.*
+```
+
+#### Windows
+
+```bash
+cd build
 ctest
 ```
 
 Или через CLion: правый клик на тесте → Run
+
+### Структура файлов для запуска
+
+Убедитесь, что структура файлов выглядит так:
+
+```
+search_engine_1/
+├── config.json          # Должен быть в корне или рядом с исполняемым файлом
+├── requests.json        # Должен быть в корне или рядом с исполняемым файлом
+├── resources/           # Директория с документами
+│   ├── file001.txt
+│   ├── file002.txt
+│   └── file003.txt
+└── build/              # Директория сборки (или cmake-build-debug)
+    └── search_engine_1  # Исполняемый файл (или search_engine_1.exe на Windows)
+```
+
+**Примечание**: После сборки файл `answers.json` будет создан автоматически в той же директории, где запускается программа.
+
+## Кроссплатформенность
+
+Проект полностью кроссплатформенный и работает на:
+
+### ✅ Linux
+
+**Требования**:
+- GCC 10+ или Clang 12+ с поддержкой C++20
+- CMake 3.15+
+- Стандартная библиотека pthread (обычно входит в систему)
+
+**Установка зависимостей** (Ubuntu/Debian):
+```bash
+sudo apt-get update
+sudo apt-get install build-essential cmake git
+```
+
+**Установка зависимостей** (Fedora/RHEL):
+```bash
+sudo dnf install gcc-c++ cmake git
+```
+
+**Установка зависимостей** (Arch Linux):
+```bash
+sudo pacman -S base-devel cmake git
+```
+
+**Сборка**:
+```bash
+mkdir build && cd build
+cmake ..
+make
+./search_engine_1
+```
+
+### ✅ Windows
+
+**Требования**:
+- Visual Studio 2019+ с поддержкой C++20, или
+- MinGW-w64 с GCC 10+
+- CMake 3.15+
+
+**Сборка с Visual Studio**:
+```bash
+mkdir build && cd build
+cmake .. -G "Visual Studio 17 2022"
+cmake --build . --config Release
+```
+
+**Сборка с MinGW**:
+```bash
+mkdir build && cd build
+cmake .. -G "MinGW Makefiles"
+cmake --build .
+```
+
+### ✅ macOS
+
+**Требования**:
+- Xcode 13+ (Clang 12+)
+- CMake 3.15+ (можно установить через Homebrew)
+
+**Установка CMake** (если не установлен):
+```bash
+brew install cmake
+```
+
+**Сборка**:
+```bash
+mkdir build && cd build
+cmake ..
+make
+./search_engine_1
+```
+
+### Важные замечания
+
+1. **Пути к файлам**: Все пути к файлам (`config.json`, `requests.json`, `answers.json`) относительные и работают одинаково на всех платформах.
+
+2. **Разделители путей**: В коде используются относительные пути, поэтому проблемы с `/` vs `\` не возникают.
+
+3. **Многопоточность**: Используется стандартная библиотека `std::thread`, которая работает на всех платформах.
+
+4. **Зависимости**: Все зависимости (`nlohmann/json`, `googletest`) загружаются автоматически через CMake FetchContent, не требуют ручной установки.
+
+5. **Кодировка файлов**: JSON файлы должны быть в UTF-8 (стандарт для JSON).
+
+### Возможные проблемы и решения
+
+**Проблема**: "CMake version is too old"
+- **Решение**: Обновите CMake до версии 3.15 или выше
+
+**Проблема**: "C++20 not supported"
+- **Решение**: Обновите компилятор (GCC 10+, Clang 12+, MSVC 2019+)
+
+**Проблема**: "config.json not found"
+- **Решение**: Убедитесь, что файл находится в той же директории, где запускается программа, или скопируйте его в директорию сборки
+
+**Проблема**: На Linux - ошибки компиляции с pthread
+- **Решение**: Установите `libpthread-dev` (Ubuntu/Debian) или `glibc-devel` (Fedora)
 
 ## Требования к файлам
 
@@ -287,6 +472,7 @@ ctest
 2. **Обработка ошибок**: Все критические ошибки обрабатываются с выбросом исключений
 3. **Валидация данных**: Проверка наличия файлов и корректности JSON
 4. **Нормализация релевантности**: Релевантность нормализуется от 0 до 1 для удобства сравнения
+5. **Кроссплатформенность**: Проект работает на Linux, Windows и macOS без изменений кода
 
 ## Тестирование
 

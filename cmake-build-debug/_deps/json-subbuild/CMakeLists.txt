@@ -19,7 +19,7 @@ project(json-populate NONE)
 
 include(ExternalProject)
 ExternalProject_Add(json-populate
-                     "UPDATE_DISCONNECTED" "False" "DOWNLOAD_EXTRACT_TIMESTAMP" "FALSE" "EXTERNALPROJECT_INTERNAL_ARGUMENT_SEPARATOR" "URL" "https://github.com/nlohmann/json/releases/download/v3.12.0/json.tar.xz"
+                     "UPDATE_DISCONNECTED" "False" "DOWNLOAD_EXTRACT_TIMESTAMP" "TRUE" "EXTERNALPROJECT_INTERNAL_ARGUMENT_SEPARATOR" "URL" "https://github.com/nlohmann/json/releases/download/v3.12.0/json.tar.xz"
                     SOURCE_DIR          "C:/Users/Vladimir/CLionProjects/search_engine_1/cmake-build-debug/_deps/json-src"
                     BINARY_DIR          "C:/Users/Vladimir/CLionProjects/search_engine_1/cmake-build-debug/_deps/json-build"
                     CONFIGURE_COMMAND   ""
