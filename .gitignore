@@ -39,9 +39,12 @@ _deps/
 
 # Generated files
 answers.json
+**/answers.json
 
 # Temporary files
 *.tmp
 *.log
 *.cache
+
+
 
