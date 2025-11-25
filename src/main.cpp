@@ -1,8 +1,8 @@
 #include <iostream>
 #include "nlohmann/json.hpp"
-#include "../include/ConverterJSON.h"
-#include "../include/InvertedIndex.h"
-#include "../include/SearchServer.h"
+#include "ConverterJSON.h"
+#include "InvertedIndex.h"
+#include "SearchServer.h"
 #include <fstream>
 
 using json = nlohmann::json;
@@ -12,19 +12,6 @@ int main() {
         std::cout << "Starting..." << std::endl;
 
         ConverterJSON converter;
-
-        std::ifstream config_file("config.json");
-        if (!config_file.is_open()) {
-            std::cerr << "Error: config file is missing" << std::endl;
-            return 1;
-        }
-        
-        json config = json::parse(config_file);
-        config_file.close();
-        
-        if (config.contains("config") && config["config"].contains("name")) {
-            std::cout << config["config"]["name"] << std::endl;
-        }
 
         int max_responses = converter.GetResponseLimit();
 

@@ -1,17 +1,8 @@
-#include "../include/SearchServer.h"
-#include "../include/InvertedIndex.h"
+#include "SearchServer.h"
+#include "InvertedIndex.h"
 #include "gtest/gtest.h"
 
 using namespace std;
-
-/**
- * Этап 5: Тесты для SearchServer
- * 
- * Эти тесты проверяют корректность работы поискового сервера:
- * - Правильность расчета релевантности
- * - Корректность сортировки результатов
- * - Обработку запросов без результатов
- */
 
 TEST(TestCaseSearchServer, TestSimple) {
     const vector<string> docs = {

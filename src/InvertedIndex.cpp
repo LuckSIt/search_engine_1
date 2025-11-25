@@ -1,4 +1,4 @@
-#include "../include/InvertedIndex.h"
+#include "InvertedIndex.h"
 #include <sstream>
 #include <algorithm>
 #include <thread>
@@ -16,7 +16,7 @@ std::vector<std::string> splitIntoWords(const std::string& text) {
     return words;
 }
 
-void InvertedIndex::UpdateDocumentBase(std::vector<std::string> input_docs) {
+void InvertedIndex::UpdateDocumentBase(const std::vector<std::string>& input_docs) {
     docs.clear();
     freq_dictionary.clear();
 

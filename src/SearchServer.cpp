@@ -1,4 +1,4 @@
-#include "../include/SearchServer.h"
+#include "SearchServer.h"
 #include <sstream>
 #include <algorithm>
 #include <set>
@@ -121,4 +121,5 @@ std::vector<std::vector<RelativeIndex>> SearchServer::search(const std::vector<s
     
     return results;
 }
+
 
